@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../static/jpg/02.png" type="image/x-icon">
+    <link rel="stylesheet" href="../static/signup.css">
+    <title>Register</title>
+</head>
+<body>        
+
+  <header>
+    <nav>
+      <a href="/">Forum</a>
+      <div class="left">
+        <a href="/signin">Sign in</a>
+      </div> 
+      <div class="center">
+        <a href="/signup" style="color: rgb(68, 217, 236);">Sign up</a>
+      </div>
+      <div class="right">
+        <a href="/about" title=" Your password must be 8-20 characters long and consist of at least:
+        1 lower case letter (a), 
+        1 upper case letter (A), 
+        1 number (1), 
+        1 special symbol ($) .
+        ">About</a>
+      </div>
+    </nav>
+  </header>
+
+  {{if .}}
+  <main>
+    <form method="POST" action="/signup">
+      <h3 style="color: rgb(218, 0, 0); ">{{.Error}}</h3>
+            <h1>Forum</h1>
+        <label for="username">Имя пользователя:</label>
+        <input type="text" pattern="[\x20-\x7E]{6,36}" maxlength="36" id="username" name="username" required placeholder="Enter your name"
+        value="{{.Username}}">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email"  name="email" required placeholder="Example@email.com" 
+        pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+        title="Your email address must be in the format of user@example.com, where:
+        - 'user' can contain lowercase letters (a-z), digits (0-9), and special characters: _%+-
+        - '@' is a required symbol
+        - 'example.com' represents the domain, consisting of lowercase letters (a-z) and a period (.)
+        - The domain extension must have at least two lowercase letters (e.g., .com, .org)"
+        value="{{.Email}}"
+        >
+
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required placeholder="Enter password" 
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&#+-=_^]{8,20}$"
+        title=" Your password must be 8-20 characters long and consist of at least:
+        1 lower case letter (a), 
+        1 upper case letter (A), 
+        1 number (1), 
+        1 special symbol ($) .
+        ">
+
+        <label for="passwordr">Повторите пароль:</label>
+        <input type="password" id="password1" name="password1" required placeholder="Repeat password" 
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&#+-=_^]{8,20}$"
+        title="your password must match the first one">
+
+        <button type="submit" value="sign-up" >Зарегистрироваться</button>
+        <a href="/signin"> У меня уже есть аккаунт</a>
+    </form>
+</main>
+  {{else}}
+
+    <main>
+        <form method="POST" action="/signup">
+                <h1>Forum</h1>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" pattern="[\x20-\x7E]{6,36}" maxlength="36" id="username" name="username" required placeholder="Enter your name">
+    
+            <label for="email">Email:</label>
+            <input type="email" id="email"  name="email" required placeholder="Example@email.com" 
+            pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" 
+            title="Your email address must be in the format of user@example.com, where:
+            - 'user' can contain lowercase letters (a-z), digits (0-9), and special characters: _%+-
+            - '@' is a required symbol
+            - 'example.com' represents the domain, consisting of lowercase letters (a-z) and a period (.)
+            - The domain extension must have at least two lowercase letters (e.g., .com, .org)"
+            >
+    
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required placeholder="Enter password" 
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&#+-=_^]{8,20}$"
+            title=" Your password must be 8-20 characters long and consist of at least:
+            1 lower case letter (a), 
+            1 upper case letter (A), 
+            1 number (1), 
+            1 special symbol ($) .
+            ">
+    
+            <label for="passwordr">Повторите пароль:</label>
+            <input type="password" id="password1" name="password1" required placeholder="Repeat password" 
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&#+-=_^]{8,20}$"
+            title="your password must match the first one">
+    
+            <button type="submit" value="sign-up" >Зарегистрироваться</button>
+            <a href="/signin"> У меня уже есть аккаунт</a>
+        </form>
+    </main>
+{{end}}
+  <footer>
+      <p>Other Applications: <a href="#app1">Are</a>, <a href="#app2">You</a>, <a href="#app3">Tired?</a></p>
+  </footer>
+
+</body>
+</html>

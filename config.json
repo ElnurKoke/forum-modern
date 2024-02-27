@@ -1,0 +1,7 @@
+{
+    "port": ":8080",
+    "db":{
+        "dsn" : "forum.db",
+        "driver" : "sqlite3"
+    }
+}

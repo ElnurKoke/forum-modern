@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGN IN</title>
+    <link rel="icon" href="../static/jpg/02.png" type="image/x-icon">
+    <link rel="stylesheet" href="../static/signin.css">
+</head>
+<body>
+    <header>
+        <nav>
+          <a href="/">Forum</a>
+          <div class="left">
+            <a href="/signin" style="color: rgb(68, 217, 236);">Sign in</a>
+          </div> 
+          <div class="center">
+            <a href="/signup">Sign up</a>
+          </div>
+          <div class="right">
+            <a href="/about" >About</a>
+          </div>
+        </nav>
+      </header>
+      
+      {{if .}}
+      
+      <main>
+        <form method="POST" action="/signin">
+          <h3 style="color: rgb(218, 0, 0); ">{{.Error}}</h3>
+          <h1>Forum</h1>
+            <label for="username">Имя пользователя:</label>
+            <input type="text" maxlength="36" id="username" name="username" required placeholder="Enter Your name"
+            pattern="[\x20-\x7E]{6,36}"
+            title="Incorrect name format"
+            value="{{.Username}}">
+    
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required placeholder="Enter yur password" 
+            pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&#+-=_^]{8,20}$"
+            title="Incorrect password format">
+    
+            <button type="submit" value="sign-in">Войти</button>
+            <a href="/signup" > Создать аккаунт</a>
+            <a href="/auth/google" class="social-link"><img src="../static/jpg/google.png" title="Authentication by your google account"></a> 
+            <a href="/login/github/" class="social-link"><img src="../static/jpg/github.png" title="Authentication by your github account"></a>
+        </form>
+    </main>
+      {{else}}
+        <main>
+            <form method="POST" action="/signin">
+              <h1>Forum</h1>
+                <label for="username">Имя пользователя:</label>
+                <input type="text" maxlength="36" id="username" name="username" required placeholder="Enter Your name"
+                pattern="[\x20-\x7E]{6,36}"
+                title="Incorrect name format"
+                >
+        
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" name="password" required placeholder="Enter yur password" 
+                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#])[A-Za-z\d$@$!%*?&#+-=_^]{8,20}$"
+                title="Incorrect password format"
+                >
+        
+                <button type="submit" value="sign-in">Войти</button>
+                <a href="/signup"> Создать аккаунт</a>
+                <a href="/auth/google" class="social-link"><img src="../static/jpg/google.png" title="Authentication by your google account"></a> 
+                <a href="/login/github/" class="social-link"><img src="../static/jpg/github.png" title="Authentication by your github account"></a>
+            </form>
+        </main>
+      {{end}}
+      <footer>
+          <p>Other Applications: <a href="/auth/google">Войти через Google</a> // <a href="/login/github/">Войти через Github</a>, //<a href="#app3">Войти через Facebook</a></p>
+      </footer>
+
+</body>
+</html>

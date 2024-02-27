@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="icon" href="../static/jpg/02.png" type="image/x-icon">
+    <link rel="stylesheet" href="../static/profile.css">
+</head>
+
+<body>
+    <nav><a  href="/">Forum</a></nav>
+    <div class="back">
+    <input type="radio" name="background" id="background0" value="url('../static/jpg/art/black.png')" checked>
+    <label for="background0">black</label>
+    <input type="radio" name="background" id="background1" value="url('../static/jpg/art/81mg.gif')">
+    <label for="background1">animation</label>
+    <input type="radio" name="background" id="background2" value="url('../static/jpg/oboi.jpg')">
+    <label for="background2">standard</label>
+    <input type="radio" name="background" id="background3" value="url('../static/jpg/oboi2.jpg')">
+    <label for="background3">standard 2</label>
+    </div>
+    <div class="profile">
+        <div class="avatar-container "><img class="avatar-img " src="../static/jpg/oboi.jpg" alt="Profile Picture"></div>
+        {{if .Error}}
+        <h3 style="color: rgb(218, 178, 0); ">{{.Error}}</h3>
+        {{end}}
+        <h1>{{.User.Username}}</h1>
+        <p>Name: soon...</p>
+        <p>Email: {{.User.Email}}</p>
+        <p>Bio: soon...</p>
+        <button id="editButton">Edit Profile</button>
+    </div>
+
+    <div class="editProfile">
+        <div class="avatar-container "><img class="avatar-img " src="../static/jpg/oboi.jpg" alt="Profile Picture"></div>
+        <h1>{{.User.Username}}</h1>
+        <form method="POST" action="/profile/?id={{.User.Id}}">
+            <label for="username">New name:</label>
+            <input type="text" pattern="[\x20-\x7E]{6,36}" maxlength="36" id="username" name="username"  placeholder="Enter your new name"
+            value="{{.User.Username}}" required>
+            <button type="submit" value="profile" >save</button>
+        </form>
+        <p>Email: {{.User.Email}}</p>
+        <p>Bio: soon...</p>
+        
+        <button id="saveButton">Profile</button>
+    </div>
+
+    <div class="posts">
+        {{range .Posts}}
+        <div class="post"><img class="avatar-img " src="../static/data/{{.Image}}" alt="Post 1"></div>
+        {{end}}
+    </div>
+
+    <script>
+        document.getElementById('editButton').addEventListener('click', function() {
+            document.querySelector('.profile').style.display = 'none';
+            document.querySelector('.editProfile').style.display = 'block';
+        });
+
+        document.getElementById('saveButton').addEventListener('click', function() {
+            document.querySelector('.editProfile').style.display = 'none';
+            document.querySelector('.profile').style.display = 'block';
+        });
+
+
+        window.onload = function() {
+        var radios = document.getElementsByName('background');
+        
+        for (var i = 0; i < radios.length; i++) {
+            radios[i].addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.style.backgroundImage = this.value;
+                }
+            });
+        }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+body {
+    font-family: "Motiva Sans", "Twemoji", "Noto Sans", Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: black;
+}
+
+.back{
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    color: white;
+}
+
+nav a {
+    top: 20px;
+    display: inline;
+    position: relative;
+    text-decoration: none;
+    color: white;
+    font-size: 26px;
+    font-family: "Motiva Sans", "Twemoji", "Noto Sans", Helvetica, sans-serif;
+    font-weight: 500;
+    color: white; 
+    margin: 0 10px; 
+    transform: translateY(-50px);
+    animation: slideInTop 1s forwards;
+    }
+
+nav a:hover {
+    color: rgb(68, 217, 236);
+    transform: scale(1.1);
+    }
+
+
+.profile, .editProfile {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.avatar-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* Делаем круглую форму */
+    overflow: hidden; /* Скрыть все, что выходит за пределы круга */
+    border: 5px solid #009600; /* Толщина и цвет обводки */
+    box-shadow: 0 0 10px rgb(0, 109, 36); /* Тень для аватарки */
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Сделать изображение вписывающимся, без искажения */
+}
+
+.profile  h1 {
+    color: aliceblue;
+    font-size: 24px;
+    margin: 10px 0;
+}
+.profile p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: aliceblue;
+}
+
+.editProfile {
+    display: none;
+}
+
+.editProfile  h1{
+    color: aliceblue;
+    font-size: 24px;
+    margin: 10px 0;
+}
+.editProfile  p{
+    color: aliceblue;
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.editProfile .post img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+form label{
+    color: aliceblue;
+}
+
+.posts {
+    max-width: 600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* gap: 20px; */
+    margin-top: 20px;
+    /* padding: 20px;       */
+}
+
+.post{
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    height: 200px;
+    color: aliceblue;
+    /* padding: 20px;  */
+    border: 0.1px solid rgb(0, 0, 0); 
+    box-sizing: border-box;
+}
+
+.post img {
+    width: 100%;
+    border-radius: 0px;
+    background-size: cover; 
+    
+}
+

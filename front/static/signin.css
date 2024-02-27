@@ -1,0 +1,144 @@
+body {
+    background: url('jpg/oboi2.jpg') no-repeat center center fixed; 
+    /* background-color: #171a21;  */
+    color: #ffffff; /* Белый текст */
+    font-family: Arial, sans-serif;
+  }
+  *{
+  padding: 0;
+  margin: 0;
+  }
+  @media (min-width: 3000px) {
+    body {
+      background: url('jpg/oboi2.jpg') repeat;
+    }
+  }
+  .note{
+    background: url('jpg/note.png') no-repeat center center fixed; 
+    background-size: contain;
+  }
+  
+  header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(51, 51, 51, 0.5); 
+      color: white;
+      text-align: left;
+      padding: 10px;
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      padding-right: 20px;
+      
+    }
+    nav a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    
+    nav .left a,
+    nav .center a,
+    nav .right a {
+      
+      font-family: "Motiva Sans", "Twemoji", "Noto Sans", Helvetica, sans-serif;
+      color: white; 
+      margin: 0 10px; 
+    }
+    
+    nav .left a:hover,
+    nav .center a:hover,
+    nav .right a:hover {
+      color: rgb(68, 217, 236);
+    }
+    
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+  
+    
+  
+   a {
+      color: white; /* Цвет текста */
+      text-decoration: none; /* Убираем подчеркивание */
+  }
+  a:hover {
+      color: rgb(0, 200, 255); /* Цвет текста */
+  }
+  main{
+      margin-top: 10%;
+      font-family: 'Arial', sans-serif;
+      
+      padding: 20px;
+  }
+  
+  form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #1b1e24; /* Цвет формы */
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  label {
+      display: block;
+      margin-bottom: 8px;
+      color: #66c0f4; /* Акцентный цвет Steam */
+  }
+  
+  input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+  }
+  
+  button {
+      background-color: #66c0f4; /* Акцентный цвет Steam */
+      color: #ffffff;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 16px;
+  }
+  
+  button:hover {
+      background-color: #4fa2db; /* Цвет при наведении */
+  }
+  
+
+  .social-link {
+    display: inline-block;
+    width: 30px; /* начальная ширина */
+    height: 30px; /* начальная высота */
+    transition: all 0.3s ease; /* добавляем плавное переходное свойство */
+}
+
+/* Стили для изображений внутри ссылок */
+.social-link img {
+    width: 100%; /* растягиваем изображение на всю ширину ссылки */
+    height: auto; /* автоматически вычисляем высоту изображения */
+    vertical-align: middle;
+}
+
+/* При наведении мыши */
+.social-link:hover {
+    width: 100px; /* увеличиваем ширину при наведении */
+    height: 100px; /* увеличиваем высоту при наведении */
+}
