@@ -24,7 +24,9 @@ func InitDB(config server.Config) *sql.DB {
 		"commentTable.sql",
 		"reactionCommentTable.sql",
 		"reactionPostTable.sql",
-		"notificationTable.sql"}
+		"notificationTable.sql",
+		"moreInfoUser.sql",
+		"action.sql"}
 	for _, migrationFile := range migrations {
 		content, err := ioutil.ReadFile(filepath.Join("migrations", migrationFile))
 		if err != nil {

@@ -22,7 +22,7 @@
     <label for="background3">standard 2</label>
     </div>
     <div class="profile">
-        <div class="avatar-container "><img class="avatar-img " src="../static/jpg/oboi.jpg" alt="Profile Picture"></div>
+        <div class="avatar-container "><img class="avatar-img " src="../static/useravatars/ava.jpg" alt="Profile Picture"></div>
         {{if .Error}}
         <h3 style="color: rgb(218, 178, 0); ">{{.Error}}</h3>
         {{end}}
@@ -34,7 +34,7 @@
     </div>
 
     <div class="editProfile">
-        <div class="avatar-container "><img class="avatar-img " src="../static/jpg/oboi.jpg" alt="Profile Picture"></div>
+        <div class="avatar-container "><img class="avatar-img " src="../static/useravatars/ava.jpg" alt="Profile Picture"></div>
         <h1>{{.User.Username}}</h1>
         <form method="POST" action="/profile/?id={{.User.Id}}">
             <label for="username">New name:</label>
