@@ -1,16 +1,15 @@
 package service
 
 import (
-	"fmt"
 	"forum/internal/models"
 	"forum/internal/storage"
-	"time"
 )
 
 type ServiceMsgIR interface {
-	CreateMassage(post models.Message, comm string) error
-	GetMessagesByAuthor(author string) ([]models.Message, error)
-	GetMessagesByReactAuthor(rauthor string) ([]models.Message, error)
+	CreateMassagePost(mes models.Message) error
+	CreateMassageComment(mes models.Message) error
+	GetMessagesByAuthorId(id int) ([]models.Message, error)
+	GetMessagesByReactAuthorId(id int) ([]models.Message, error)
 }
 
 type MsgService struct {
@@ -23,33 +22,29 @@ func NewServiceMsg(NotificationIR storage.NotificationIR) ServiceMsgIR {
 	}
 }
 
-func (m *MsgService) CreateMassage(mes models.Message, comm string) error {
-	if mes.Message == "cl" {
-		mes.Message = fmt.Sprintf(" %s liked comment: \"%s\" . Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
-	} else if mes.Message == "cd" {
-		mes.Message = fmt.Sprintf(" %s disliked comment: \"%s\". Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
-	} else if mes.Message == "pl" {
-		mes.Message = fmt.Sprintf(" %s loved post: \"%s\" . Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
-	} else if mes.Message == "pd" {
-		mes.Message = fmt.Sprintf("Oh no! %s disliked post: \"%s\". Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
-	} else if mes.Message == "cc" {
-		mes.Message = fmt.Sprintf(" %s commented on post: \"%s\". Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
-	}
-	exists, err := m.storage.MessageExists(mes.Author, mes.Message, mes.PostId, mes.CommentId)
-	if err != nil {
-		return err
-	}
-	if exists {
-		return m.storage.UpdateMessageCreationTime(mes.Author, mes.Message, time.Now(), mes.PostId, mes.CommentId)
-	} else {
-		return m.storage.CreateMassage(mes)
-	}
+func (m *MsgService) CreateMassagePost(mes models.Message) error {
+	return m.storage.CreateMassagePost(mes)
 }
 
-func (m *MsgService) GetMessagesByAuthor(author string) ([]models.Message, error) {
-	return m.storage.GetMessagesByAuthor(author)
+func (m *MsgService) CreateMassageComment(mes models.Message) error {
+	return m.storage.CreateMassageComment(mes)
 }
 
-func (m *MsgService) GetMessagesByReactAuthor(rauthor string) ([]models.Message, error) {
-	return m.storage.GetMessagesByReactAuthor(rauthor)
+func (m *MsgService) GetMessagesByAuthorId(id int) ([]models.Message, error) {
+	// if mes.Message == "cl" {
+	// 	mes.Message = fmt.Sprintf(" %s liked comment: \"%s\" . Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
+	// } else if mes.Message == "cd" {
+	// 	mes.Message = fmt.Sprintf(" %s disliked comment: \"%s\". Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
+	// } else if mes.Message == "pl" {
+	// 	mes.Message = fmt.Sprintf(" %s loved post: \"%s\" . Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
+	// } else if mes.Message == "pd" {
+	// 	mes.Message = fmt.Sprintf("Oh no! %s disliked post: \"%s\". Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
+	// } else if mes.Message == "cc" {
+	// 	mes.Message = fmt.Sprintf(" %s commented on post: \"%s\". Which was created by \"%s\"", mes.ReactAuthor, comm, mes.Author)
+	// }
+	return m.storage.GetMessagesByAuthorId(id)
+}
+
+func (m *MsgService) GetMessagesByReactAuthorId(id int) ([]models.Message, error) {
+	return m.storage.GetMessagesByReactAuthorId(id)
 }

@@ -100,14 +100,14 @@ func (c *CommentStorage) GetCommentsByIdPost(id int) ([]models.Comment, error) {
 }
 
 func (c *CommentStorage) GetCommentsByIdComment(id int) (models.Comment, error) {
-	query := `SELECT c.id_post, u.username, c.comment, c.likes, c.dislikes, c.created_at 
+	query := `SELECT c.id_post,c.author_id, u.username, c.comment, c.likes, c.dislikes, c.created_at 
 		FROM comment c
 		LEFT JOIN user u
 		ON u.id = c.author_id
 		WHERE c.id = $1`
 	row := c.db.QueryRow(query, id)
 	var comment models.Comment
-	if err := row.Scan(&comment.PostId, &comment.Creator, &comment.Text, &comment.Likes, &comment.Dislikes, &comment.Created_at); err != nil {
+	if err := row.Scan(&comment.PostId, &comment.UserId, &comment.Creator, &comment.Text, &comment.Likes, &comment.Dislikes, &comment.Created_at); err != nil {
 		log.Println(err.Error())
 		return models.Comment{}, fmt.Errorf("storage: comment by id comment: %w", err)
 	}

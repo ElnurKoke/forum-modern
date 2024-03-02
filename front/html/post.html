@@ -61,7 +61,6 @@
 
 
 	<section>
-   
 		<div class="container">
 			
 		<div class="post">
@@ -87,15 +86,14 @@
 					<img class="setting" src="../static/jpg/dislike.png" alt="Edit"></button>
 			</form>
 			{{ end }}
-
 		</div>
 		<h2 style="text-align: right;">Comments : </h2>
 		<div class="comments">
 		{{ if .Comment }}
-			<ul>
+			<ul >
 				{{ range .Comment }}
-					<li>
-					<h3>{{ .Creator }} </h3>
+					<li id="comment{{ .Id }}">
+					<h3 >{{ .Creator }} </h3>
 					<p style="color: #808080;">{{ .Created_at }}</p>
 					<p style="text-align: right;">{{ .Text }}</p>
 					<p style="color: #808080;">Likes: {{ .Likes }}, Dislikes: {{ .Dislikes }}</p>
@@ -144,6 +142,16 @@
 	</footer>
 
 	<script>
+		var fragment = window.location.hash.substring(1);
+		
+		var commentElement = document.getElementById(fragment);
+        if (commentElement) {
+			commentElement.style.backgroundImage = 'url("../static/jpg/point.png")';
+			commentElement.style.backgroundSize = 'contain'; // Масштабирование изображения по размеру элемента
+			commentElement.style.backgroundRepeat = 'no-repeat'; // Отключение повторения изображения
+			commentElement.style.backgroundPosition = 'left top'; // Изображение будет расположено в левом верхнем углу
+        }
+
 		document.getElementById('toggleButton').addEventListener('click', function() {
 		var hiddenContent = document.getElementById('hiddenContent');
 		if (hiddenContent.style.display === 'none') {
@@ -155,8 +163,7 @@
 
 
 		function confirmDelete() {
-        	return confirm("Are you really going to delete this creation?");
-   		}
+        	return confirm("Are you really going to delete this creation?");}
 		function confirmChange() {
         	return confirm("Are you really going to change this creation?");
         }
@@ -173,7 +180,9 @@
             alert('Please select at least one checkbox.');
             event.preventDefault();
         }
-    });
+        });
+
+
 
 	</script>
 	

@@ -27,13 +27,13 @@ func (h *Handler) notification(w http.ResponseWriter, r *http.Request) {
 		h.ErrorPage(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
-	msgs, err := h.Service.ServiceMsgIR.GetMessagesByAuthor(user.Username)
+	msgs, err := h.Service.ServiceMsgIR.GetMessagesByAuthorId(user.Id)
 	sort.Sort(ByCreatedAtMes(msgs))
 	if err != nil {
 		log.Println(err.Error())
 		h.ErrorPage(w, err.Error(), http.StatusInternalServerError)
 	}
-	msgsmy, err := h.Service.ServiceMsgIR.GetMessagesByReactAuthor(user.Username)
+	msgsmy, err := h.Service.ServiceMsgIR.GetMessagesByReactAuthorId(user.Id)
 	sort.Sort(ByCreatedAtMes(msgsmy))
 	if err != nil {
 		log.Println(err.Error())

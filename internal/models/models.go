@@ -49,14 +49,19 @@ type Post struct {
 }
 
 type Message struct {
-	Id          int
-	PostId      int
-	CommentId   int
-	Author      string
-	ReactAuthor string
-	Message     string
-	Active      int
-	CreateAt    time.Time
+	Id            int
+	PostId        int
+	CommentId     int
+	FromUserId    int
+	ToUserId      int
+	Author        string
+	ReactAuthor   string
+	Message       string
+	Active        int
+	FromUserName  string
+	PostImage     string
+	FromUserImage string
+	CreateAt      time.Time
 }
 
 type Comment struct {

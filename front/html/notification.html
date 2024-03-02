@@ -8,6 +8,7 @@
   <title>Notification Page</title>
   <link rel="icon" href="../static/jpg/02.png" type="image/x-icon">
   <link rel="stylesheet" href="../static/notif.css">
+
 </head>
 
 <body>
@@ -32,32 +33,35 @@
     {{end}}
     {{if .Notifications}}
       {{range .Notifications}}
-        {{if ne .ReactAuthor $.User.Username}}
-          <div class="Teanav">
-            <div class="container">
-              <a href="/post/?id={{.PostId}}" >            
-                <p>{{.CreateAt}}</p>
-                <h2>New notification</h2>
-                <p>{{.Message}}</p>
-              </a>
-            </div>
+        {{if ne .FromUserId .ToUserId  }}
+          <div class="notification">
+            <img src="../static/useravatars/ava.jpg" alt="ava.jpg" class="avatar">
+            <p class="username">{{.FromUserName}}</p>
+            <p class="message">{{.Message}}</p>
+            {{if .CommentId}}
+            <a href="/post/?id={{.PostId}}#comment{{.CommentId}}">view</a>
+            {{else}}
+            <a href="/post/?id={{.PostId}}">view</a>
+            {{end}}
+            <img src="../static/data/{{.PostImage}}" alt="PostImage" class="post-image">
           </div>
         {{end}}
       {{end}}
     {{end}}
 
     {{if .Actions}}  
- 
       {{range .Actions}}
-        {{if ne .ReactAuthor .Author}}
-        <div class="Teanav">
-          <div class="container">
-            <a href="/post/?id={{.PostId}}" >            
-              <p>{{.CreateAt}}</p>
-              <h2>Your action</h2>
-              <p>{{.Message}}</p>
-            </a>
-          </div>
+        {{if ne .FromUserId  $.User.Id}}
+        <div class="notification">
+          <img src="../static/useravatars/ava.jpg" alt="ava.jpg" class="avatar">
+          <p class="username">{{.FromUserName}}</p>
+          <p class="message">{{.Message}}</p>
+          {{if .CommentId}}
+          <a href="/post/?id={{.PostId}}#comment{{.CommentId}}">view</a>
+          {{else}}
+          <a href="/post/?id={{.PostId}}">view</a>
+          {{end}}
+          <img src="../static/data/{{.PostImage}}" alt="PostImage" class="post-image">
         </div>
         {{end}}
       {{end}}

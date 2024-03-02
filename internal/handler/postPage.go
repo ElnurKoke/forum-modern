@@ -19,6 +19,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 		h.ErrorPage(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 		return
 	}
+
 	userValue := r.Context().Value("user")
 	if userValue == nil {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
@@ -74,9 +75,9 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, err.Error(), http.StatusBadRequest)
 			return
 		}
-		if err = h.Service.ServiceMsgIR.CreateMassage(models.Message{
-			PostId: post.Id, CommentId: commentid, ReactAuthor: user.Username, Author: post.Author, Message: "cc",
-		}, commentText); err != nil {
+		if err = h.Service.ServiceMsgIR.CreateMassageComment(models.Message{
+			PostId: post.Id, CommentId: commentid, FromUserId: user.Id, ToUserId: post.UserId, Message: "cc",
+		}); err != nil {
 			h.ErrorPage(w, err.Error(), http.StatusBadRequest)
 			return
 		}

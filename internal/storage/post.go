@@ -157,7 +157,16 @@ func uniqueStrings(input []string) []string {
 }
 
 func (p *PostStorage) GetPostByID(id int) (models.Post, error) {
-	query := `SELECT post.id, user.username, post.title, post.description, post.imageURL, post.created_at, post.likes, post.dislikes ,post.category
+	query := `SELECT post.id,
+			post.author_id, 
+			user.username, 
+			post.title, 
+			post.description, 
+			post.imageURL, 
+			post.created_at, 
+			post.likes, 
+			post.dislikes ,
+			post.category
 		FROM post
 		LEFT JOIN user 
 		ON post.author_id = user.id
@@ -165,7 +174,8 @@ func (p *PostStorage) GetPostByID(id int) (models.Post, error) {
 	row := p.db.QueryRow(query, id)
 	var post models.Post
 	var categoriesStr string
-	if err := row.Scan(&post.Id, &post.Author, &post.Title, &post.Description, &post.Image, &post.CreateAt, &post.Likes, &post.Dislikes, &categoriesStr); err != nil {
+	if err := row.Scan(&post.Id, &post.UserId, &post.Author, &post.Title, &post.Description,
+		&post.Image, &post.CreateAt, &post.Likes, &post.Dislikes, &categoriesStr); err != nil {
 		return models.Post{}, err
 	}
 	post.Category = strings.Split(categoriesStr, ", ")

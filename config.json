@@ -1,7 +1,7 @@
 {
     "port": ":8080",
     "db":{
-        "dsn" : "forum.db",
+        "dsn" : "forum.db?_foreign_keys=1",
         "driver" : "sqlite3"
     }
 }
