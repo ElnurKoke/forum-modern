@@ -8,6 +8,7 @@ import (
 
 type User interface {
 	GetUserByToken(token string) (models.User, error)
+	GetUserById(id int) (models.User, error)
 	UpdateUserName(id int, username string) error
 }
 
@@ -23,6 +24,9 @@ func NewUserService(storage *storage.Storage) *UserService {
 
 func (u *UserService) GetUserByToken(token string) (models.User, error) {
 	return u.storage.User.GetUserByToken(token)
+}
+func (u *UserService) GetUserById(id int) (models.User, error) {
+	return u.storage.User.GetUserById(id)
 }
 
 func (u *UserService) UpdateUserName(id int, username string) error {

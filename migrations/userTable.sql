@@ -4,7 +4,13 @@ CREATE TABLE IF NOT EXISTS user (
 	username TEXT UNIQUE,
 	password TEXT,
 	session_token TEXT DEFAULT NULL,
-	expiresAt DATETIME DEFAULT NULL
+	expiresAt DATETIME DEFAULT NULL,
+	imageBack TEXT DEFAULT 'black.png',
+	imageURL TEXT DEFAULT 'ava.jpg',
+	rol INT DEFAULT 'user',
+	bio TEXT DEFAULT 'hey i am new user',
+	created_at DATE DEFAULT (datetime('now','localtime')),
+    updated_at DATE DEFAULT (datetime('now','localtime'))
 );
 
 

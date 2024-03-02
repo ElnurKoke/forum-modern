@@ -14,6 +14,12 @@ type User struct {
 	RepeatPassword string
 	ExpiresAt      time.Time
 	IsAuth         bool
+	ImageBack      string
+	ImageURL       string
+	Rol            string
+	Bio            string
+	Created_at     time.Time
+	Updated_at     time.Time
 }
 
 type GoogleLoginUserData struct {

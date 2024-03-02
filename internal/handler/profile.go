@@ -41,7 +41,12 @@ func (h *Handler) profilePage(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
-
+	user, err = h.Service.User.GetUserById(user.Id)
+	if err != nil {
+		h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		log.Println(err.Error())
+		return
+	}
 	switch r.Method {
 	case http.MethodGet:
 

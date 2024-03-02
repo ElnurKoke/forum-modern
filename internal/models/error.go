@@ -5,8 +5,8 @@ import (
 )
 
 var (
-	ErrCommentNotFound   = errors.New("The page does not exist or comment has been deleted.")
-	ErrPostNotFound      = errors.New("The page does not exist or post has been deleted.")
+	ErrCommentNotFound   = errors.New("The page does not exist or comment has been deleted")
+	ErrPostNotFound      = errors.New("The page does not exist or post has been deleted")
 	ErrUserNotFound      = errors.New("User does not exist or password incorrect")
 	ErrInvalidUserName   = errors.New("Invalid username - your username should consist at least 6 characters")
 	ErrInvalidEmail      = errors.New("Invalid email")

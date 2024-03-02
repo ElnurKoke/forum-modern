@@ -8,6 +8,7 @@ import (
 
 type User interface {
 	GetUserByToken(token string) (models.User, error)
+	GetUserById(id int) (models.User, error)
 	CheckUserByNameEmail(email, username string) (bool, error)
 	CheckUserByName(username string) (bool, error)
 	CheckUserByEmail(email string) (bool, error)
@@ -29,6 +30,25 @@ func (u *UserStorage) GetUserByToken(token string) (models.User, error) {
 	row := u.db.QueryRow(query, token)
 	var user models.User
 	if err := row.Scan(&user.Id, &user.Email, &user.Username, &user.ExpiresAt); err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+}
+
+func (u *UserStorage) GetUserById(id int) (models.User, error) {
+	query := `SELECT 
+			id, 
+			email, 
+			username, 
+			imageBack,
+			imageURL,
+			rol,
+			bio
+		FROM user 
+		WHERE id = $1;`
+	row := u.db.QueryRow(query, id)
+	var user models.User
+	if err := row.Scan(&user.Id, &user.Email, &user.Username, &user.ImageBack, &user.ImageURL, &user.Rol, &user.Bio); err != nil {
 		return models.User{}, err
 	}
 	return user, nil
