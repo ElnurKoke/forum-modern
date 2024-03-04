@@ -169,3 +169,26 @@ form label{
     margin: 0 auto;
     margin-bottom: 60px;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid rgb(255, 0, 119);
+}
+
+th, td {
+    border: 1px solid rgb(255, 255, 255);
+    padding: 8px;
+    text-align: left;
+}
+
+thead{
+    color:black;
+    background-color: rgb(255, 0, 119);
+}
+
+.th-avatar-img {
+    width: auto;
+    height: 40px;
+    object-fit: cover; /* Сделать изображение вписывающимся, без искажения */
+}

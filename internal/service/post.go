@@ -15,6 +15,7 @@ type ServicePostIR interface {
 	GetAllPostsByCategories(category string) ([]models.Post, error)
 	GetMyPost(int) ([]models.Post, error)
 	GetMyLikePost(int) ([]models.Post, error)
+	GetAllWaitPosts() ([]models.Post, error)
 
 	DeletePost(id int) error
 	UpdatePost(post models.Post) error
@@ -32,6 +33,10 @@ func NewPostService(postIR storage.PostIR) ServicePostIR {
 
 func (p *PostService) DeletePost(id int) error {
 	return p.storage.DeletePost(id)
+}
+
+func (p *PostService) GetAllWaitPosts() ([]models.Post, error) {
+	return p.storage.GetAllWaitPosts()
 }
 
 func (p *PostService) CreatePost(post models.Post) error {

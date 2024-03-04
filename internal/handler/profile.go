@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"forum/internal/models"
+	"forum/internal/storage"
 	"log"
 	"net/http"
 	"strconv"
@@ -43,21 +44,39 @@ func (h *Handler) profilePage(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		return
 	}
+
 	asks, err := h.Service.CommunicationServiceIR.GetAllAsks(user.Rol)
 	if err != nil {
 		h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		models.ErrLog.Println(err)
 		return
 	}
+	model := models.ProfileInfo{
+		User:        user,
+		ProfileUser: profileUser,
+		Posts:       posts,
+		Askeds:      asks,
+	}
+	if user.Rol == "king" {
+		alluser, err := h.Service.User.GetAllUser(user.Id)
+		if err != nil {
+			h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			models.ErrLog.Println(err)
+			return
+		}
+		model.AllUsers = alluser
+	} else if user.Rol == "moderator" {
+		waitPosts, err := h.Service.ServicePostIR.GetAllWaitPosts()
+		if err != nil {
+			h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			models.ErrLog.Println(err)
+			return
+		}
+		model.WaitPosts = waitPosts
+	}
 	switch r.Method {
 	case http.MethodGet:
 
-		model := models.ProfileInfo{
-			User:        user,
-			ProfileUser: profileUser,
-			Posts:       posts,
-			Askeds:      asks,
-		}
 		if err := h.Temp.ExecuteTemplate(w, "profile.html", model); err != nil {
 			log.Println(err.Error())
 			h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -96,6 +115,26 @@ func (h *Handler) profilePage(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 		} else if r.FormValue("form") == "email" { //------------------------------------------------------------------email edit
+		} else if r.FormValue("form") == "crPost" { //------------------------------------------------------------------email edit
+			if user.Rol != "moderator" {
+				h.ErrorPage(w, "your role is not suitable", http.StatusBadRequest)
+				return
+			}
+			res := r.Form.Get("isCrPost")
+			inf := strings.Split(res, ",")
+			action := inf[0]
+			strId := inf[1]
+			post_id, err := strconv.Atoi(strId)
+			if err != nil {
+				models.ErrLog.Println(" Error strconv.Atoi: ", post_id)
+				return
+			}
+			if err := h.Service.CommunicationServiceIR.ConfirmPost(post_id, action); err != nil {
+				h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+			link := fmt.Sprintf("/profile/?id=%d", user.Id)
+			http.Redirect(w, r, link, http.StatusSeeOther)
 		} else if r.FormValue("form") == "role" { //---------------------------------------------------------------------role ask
 			res := r.Form.Get("isLevelUp")
 			if res == "isLevelUp" {
@@ -128,6 +167,48 @@ func (h *Handler) profilePage(w http.ResponseWriter, r *http.Request) {
 			}
 		} else if r.FormValue("form") == "bio" { //---------------------------------------------------------------------bio edit
 		} else if r.FormValue("form") == "ava" { //---------------------------------------------------------------------ava edit
+		} else if r.FormValue("form") == "changeRole" { //--------------------------------------------------------------rol change
+			if user.Rol != "king" {
+				h.ErrorPage(w, "your role is not suitable", http.StatusBadRequest)
+				return
+			}
+			res := r.Form.Get("isLevel")
+			inf := strings.Split(res, ",")
+			strId := inf[2]
+			oldRole := inf[1]
+			updown := inf[0]
+			var newRole string
+			if updown == "up" {
+				newRole = storage.UpRole(oldRole)
+			} else {
+				newRole = storage.DownRole(oldRole)
+			}
+
+			id, err := strconv.Atoi(strId)
+			if err != nil {
+				models.ErrLog.Println(" Error strconv.Atoi: ", id)
+				return
+			}
+
+			if err := h.Service.CommunicationServiceIR.UpUserRole(id, newRole); err != nil {
+				info := models.ProfileInfo{
+					Error:       err.Error(),
+					User:        user,
+					ProfileUser: profileUser,
+					Posts:       posts,
+				}
+				if err := h.Temp.ExecuteTemplate(w, "profile.html", info); err != nil {
+					h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+					return
+				}
+				return
+			}
+			if err := h.Service.ServiceMsgIR.CreateMassageUpRole(models.Message{FromUserId: user.Id, ToUserId: id, Message: "upRole"}); err != nil {
+				h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+			link := fmt.Sprintf("/profile/?id=%d", user.Id)
+			http.Redirect(w, r, link, http.StatusSeeOther)
 		} else if r.FormValue("form") == "roleUp" { //---------------------------------------------------------------------up role
 			res := r.Form.Get("isLevelUp")
 			if strings.Contains(res, "accept") {
@@ -153,16 +234,12 @@ func (h *Handler) profilePage(w http.ResponseWriter, r *http.Request) {
 					h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 					return
 				}
-				info := models.ProfileInfo{
-					Error:       "+1 up user",
-					User:        user,
-					ProfileUser: profileUser,
-					Posts:       posts,
-				}
-				if err := h.Temp.ExecuteTemplate(w, "profile.html", info); err != nil {
+				if err := h.Service.ServiceMsgIR.CreateMassageUpRole(models.Message{FromUserId: user.Id, ToUserId: id, Message: "upRole"}); err != nil {
 					h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 					return
 				}
+				link := fmt.Sprintf("/profile/?id=%d", user.Id)
+				http.Redirect(w, r, link, http.StatusSeeOther)
 			} else if strings.Contains(res, "refuse") {
 				id, err := strconv.Atoi(res[6:])
 				if err != nil {

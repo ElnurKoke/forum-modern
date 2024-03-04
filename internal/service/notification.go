@@ -8,6 +8,7 @@ import (
 type ServiceMsgIR interface {
 	CreateMassagePost(mes models.Message) error
 	CreateMassageComment(mes models.Message) error
+	CreateMassageUpRole(mes models.Message) error
 	GetMessagesByAuthorId(id int) ([]models.Message, error)
 	GetMessagesByReactAuthorId(id int) ([]models.Message, error)
 }
@@ -24,6 +25,10 @@ func NewServiceMsg(NotificationIR storage.NotificationIR) ServiceMsgIR {
 
 func (m *MsgService) CreateMassagePost(mes models.Message) error {
 	return m.storage.CreateMassagePost(mes)
+}
+
+func (m *MsgService) CreateMassageUpRole(mes models.Message) error {
+	return m.storage.CreateMassageUpRole(mes)
 }
 
 func (m *MsgService) CreateMassageComment(mes models.Message) error {

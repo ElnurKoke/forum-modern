@@ -11,9 +11,8 @@ import (
 type NotificationIR interface {
 	CreateMassageComment(mes models.Message) error
 	CreateMassagePost(mes models.Message) error
+	CreateMassageUpRole(mes models.Message) error
 	GetMessagesByAuthorId(id int) ([]models.Message, error)
-	// MessageExists(author string, message string, postid, commentid int) (bool, error)
-	// UpdateMessageCreationTime(author string, message string, createdAt time.Time, postid, commentid int) error
 	GetMessagesByReactAuthorId(id int) ([]models.Message, error)
 }
 
@@ -41,6 +40,16 @@ func (ns *NotificationStorage) CreateMassagePost(mes models.Message) error {
 	mes.CreateAt = time.Now()
 	query := `INSERT INTO notification(post_id,  to_user_id , from_user_id,  message, created_at) VALUES ($1, $2, $3, $4, $5);`
 	_, err := ns.db.Exec(query, mes.PostId, mes.ToUserId, mes.FromUserId, mes.Message, mes.CreateAt)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ns *NotificationStorage) CreateMassageUpRole(mes models.Message) error {
+	mes.CreateAt = time.Now()
+	query := `INSERT INTO notification(post_id,  to_user_id , from_user_id,  message, created_at) VALUES ($1, $2, $3, $4, $5);`
+	_, err := ns.db.Exec(query, 1, mes.ToUserId, mes.FromUserId, mes.Message, mes.CreateAt)
 	if err != nil {
 		return err
 	}
@@ -173,6 +182,8 @@ func ConvertMessageAction(mes string) string {
 		return "You disliked comment"
 	case "cc":
 		return "You create comment"
+	case "upRole":
+		return "You promoted the role of one user"
 	default:
 		return "not have code message"
 	}
@@ -190,35 +201,9 @@ func ConvertMessageAuthor(mes string) string {
 		return "user disliked your comment"
 	case "cc":
 		return "user create comment on your post"
+	case "upRole":
+		return "your role has been changed"
 	default:
 		return "not have code message"
 	}
 }
-
-// func (ns *NotificationStorage) MessageExists(author string, message string, postid, commentid int) (bool, error) {
-// 	query := `SELECT COUNT(*) FROM notification WHERE author = $2 AND message = $3 AND post_id = $4 AND comment_id = $5;`
-// 	var count int
-// 	err := ns.db.QueryRow(query, author, message, postid, commentid).Scan(&count)
-// 	if err != nil {
-// 		return false, err
-// 	}
-// 	return count > 0, nil
-// }
-
-// func (ns *NotificationStorage) UpdateMessageCreationTime(author string, message string, createdAt time.Time, postid, commentid int) error {
-// 	updateQuery := `UPDATE notification SET created_at = $1 WHERE author = $2 AND message = $3 AND post_id = $4 AND comment_id = $5;`
-// 	result, err := ns.db.Exec(updateQuery, createdAt, author, message, postid, commentid)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	rowsAffected, err := result.RowsAffected()
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	if rowsAffected == 0 {
-// 		return fmt.Errorf("Record with author %s and message %s does not exist", author, message)
-// 	}
-
-// 	return nil
-// }

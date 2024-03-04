@@ -2,6 +2,7 @@ package storage
 
 import (
 	"database/sql"
+	"fmt"
 
 	"forum/internal/models"
 )
@@ -9,6 +10,7 @@ import (
 type User interface {
 	GetUserByToken(token string) (models.User, error)
 	GetUserById(id int) (models.User, error)
+	GetAllUser(your_id int) ([]models.User, error)
 	CheckUserByNameEmail(email, username string) (bool, error)
 	CheckUserByName(username string) (bool, error)
 	CheckUserByEmail(email string) (bool, error)
@@ -63,6 +65,34 @@ func (u *UserStorage) GetUserById(id int) (models.User, error) {
 		return models.User{}, err
 	}
 	return user, nil
+}
+
+func (u *UserStorage) GetAllUser(your_id int) ([]models.User, error) {
+	query := `SELECT id, email, username,  
+                imageBack, imageURL, rol, bio
+            FROM user 
+            WHERE id != ? 
+            ORDER BY created_at ASC`
+
+	rows, err := u.db.Query(query, your_id)
+	if err != nil {
+		return nil, fmt.Errorf("unable to query users:%s", err)
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var user models.User
+		err := rows.Scan(&user.Id, &user.Email, &user.Username, &user.ImageBack, &user.ImageURL, &user.Rol, &user.Bio)
+		if err != nil {
+			return nil, fmt.Errorf("unable to scan user row%s", err)
+		}
+		users = append(users, user)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating over user rows%s", err)
+	}
+	return users, nil
 }
 
 func (u *UserStorage) CheckUserByNameEmail(email, username string) (bool, error) {

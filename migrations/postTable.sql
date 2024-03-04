@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS post (
 	likes INT DEFAULT 0,
 	dislikes INT DEFAULT 0,
 	category TEXT,
+	status TEXT DEFAULT 'waiting',
 	created_at DATE DEFAULT (datetime('now','localtime')),
 	FOREIGN KEY (author_id) REFERENCES user(id)
 );

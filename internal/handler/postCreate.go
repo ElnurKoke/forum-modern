@@ -100,6 +100,12 @@ func (h *Handler) createPost(w http.ResponseWriter, r *http.Request) {
 			h.ErrorPage(w, err.Error(), http.StatusBadRequest)
 			return
 		}
+		if user.Rol == "king" || user.Rol == "admin" || user.Rol == "moderator" {
+			if err := h.Service.CommunicationServiceIR.ConfirmPost(0, "forking"); err != nil {
+				h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+		}
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	case http.MethodGet:
 		if err := h.Temp.ExecuteTemplate(w, "postCreate.html", categories); err != nil {

@@ -62,9 +62,10 @@
 
 	<section>
 		<div class="container">
-			
 		<div class="post">
-			
+			{{if eq .Post.Status "waiting"}}
+				<h2 style="color: red;">The post is not active yet as it is awaiting permission from moderators</h2>
+			{{end}}
 			<h1 >{{ .Post.Title }}</h1>
 			<img src="../static/data/{{ .Image }}" alt="{{ .Image }}">
 			<p>{{ .Post.Description }}</p>

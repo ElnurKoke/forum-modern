@@ -40,7 +40,7 @@ func (p *PostStorage) GetAllPostsByCategories(category string) ([]models.Post, e
 		FROM post p
 		LEFT JOIN user u
 		ON u.id = p.author_id
-		WHERE category LIKE '%' || $1 || '%';
+		WHERE p.status = "done" AND category LIKE '%' || $1 || '%';
 	`
 
 	rows, err := p.db.Query(query, category)

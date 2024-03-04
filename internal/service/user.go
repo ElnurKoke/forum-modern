@@ -9,6 +9,7 @@ import (
 type User interface {
 	GetUserByToken(token string) (models.User, error)
 	GetUserById(id int) (models.User, error)
+	GetAllUser(your_id int) ([]models.User, error)
 	UpdateUserName(id int, username string) error
 }
 
@@ -27,6 +28,9 @@ func (u *UserService) GetUserByToken(token string) (models.User, error) {
 }
 func (u *UserService) GetUserById(id int) (models.User, error) {
 	return u.storage.User.GetUserById(id)
+}
+func (u *UserService) GetAllUser(your_id int) ([]models.User, error) {
+	return u.storage.User.GetAllUser(your_id)
 }
 
 func (u *UserService) UpdateUserName(id int, username string) error {

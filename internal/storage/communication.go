@@ -13,6 +13,7 @@ type CommunicationIR interface {
 	GetTimeAskRole(id int) (time.Time, error)
 	GetAllAsks(role string) ([]models.Communication, error)
 	UpUserRole(id int, newrole string) error
+	ConfirmPost(id int, action string) error
 	DeleteAskRole(id int) error
 }
 
@@ -46,6 +47,26 @@ func (c *CommunicationStore) UpUserRole(id int, newrole string) error {
 	return nil
 }
 
+func (c *CommunicationStore) ConfirmPost(id int, action string) error {
+	var query string
+	var err error
+	if action == "accept" {
+		query = `UPDATE post SET status = "done" WHERE id= ?;`
+		_, err = c.db.Exec(query, id)
+	} else if action == "delete" {
+		query = `DELETE FROM post WHERE id = $1;`
+		_, err = c.db.Exec(query, id)
+	} else if action == "forking" {
+		query = `UPDATE post SET status = 'done' WHERE id = (SELECT MAX(id) FROM post);`
+		_, err = c.db.Exec(query)
+	}
+	if err != nil {
+		models.ErrLog.Println(err)
+		return err
+	}
+	return nil
+}
+
 func (c *CommunicationStore) DeleteAskRole(id int) error {
 	query := `DELETE FROM askrole WHERE from_user_id = $1;`
 	_, err := c.db.Exec(query, id)
@@ -72,6 +93,24 @@ func UpRole(old string) string {
 		return "moderator"
 	case "moderator":
 		return "admin"
+	case "admin":
+		return "admin"
+	case "king":
+		return "king"
+	default:
+		return "havent role"
+	}
+}
+func DownRole(old string) string {
+	switch old {
+	case "user":
+		return "user"
+	case "moderator":
+		return "user"
+	case "admin":
+		return "moderator"
+	case "king":
+		return "king"
 	default:
 		return "havent role"
 	}

@@ -10,11 +10,11 @@ body {
     padding: 0;
     margin: 0;
   }
-  @media (min-width: 3000px) {
+  /* @media (min-width: 3000px) {
     body {
       background: url('jpg/oboi.jpg') repeat;
     }
-  }
+  } */
   header {
     position: fixed;
     top: 0;
@@ -219,6 +219,20 @@ nav a:hover span{
 .about-link:hover img {
   transform: scale(1.1)
 }
+
+.gif-container {
+  position: fixed;
+  top: 40px; 
+  left: 60px; 
+  z-index: 9999; 
+  pointer-events: none; 
+}
+
+.gif-container img {
+  background: transparent; 
+  max-width: 50px; 
+}
+
 
 
 @keyframes slideInLeft {

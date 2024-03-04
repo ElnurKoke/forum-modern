@@ -12,10 +12,10 @@
 <body style="background: url('../static/jpg/art/{{.User.ImageBack}}') repeat;">
     <header>
         <nav>
-            <a href="/" style="color: rgb(255, 0, 119);"><h2>Profile</h2><span></span></a>
+            <a href="/profile/?id={{.User.Id}}" style="color: rgb(255, 0, 119);"><h2>Profile</h2><span></span></a>
             <a href="/" >Forum<span></span></a>
-            <a href="/">Forum<span></span></a>
-            <a href="/">About<span></span></a>
+            <a href="#control">Control<span></span></a>
+            <a href="/about">About<span></span></a>
         </nav>
     </header>
     <!-- <div class="back">
@@ -63,18 +63,32 @@
 
     <div class="posts">
         {{range .Posts}}
+        <a href="/post/?id={{.Id}}" style="text-decoration: none;">
         <div class="post"><img class="avatar-img " src="../static/data/{{.Image}}" alt="Post 1"></div>
+        </a>
         {{end}}
     </div>
+    <div id="control"></div>
     {{if eq .User.Rol "moderator"}}
     <div class="askeds">
-        <h1>Hi Moderator</h1>
+
+        <h2>Asks Roles:</h2>
         {{range .Askeds}}
         <form method="POST" action="/profile/?id={{$.User.Id}}">
             <p>{{.FromUserName}}- ask to raise his level to -{{.NewRole}}</p>
             <input type="hidden" name="form" value="roleUp">
             <button type="submit" value="accept{{.FromUserId}}" name="isLevelUp" >Accept</button>
             <button type="submit" value="refuse{{.FromUserId}}" name="isLevelUp" >Refuse</button>
+        </form>
+        {{end}}
+
+        <h2>Accept create posts:</h2>
+        {{range .WaitPosts}}
+        <form method="POST" action="/profile/?id={{$.User.Id}}">
+            <p>{{.Author}}- ask to permission to create a post: -{{.Title}}</p>
+            <input type="hidden" name="form" value="crPost">
+            <button type="submit" value="accept,{{.Id}}" name="isCrPost" >Accept</button>
+            <button type="submit" value="delete,{{.Id}}" name="isCrPost" >Refuse</button>
         </form>
         {{end}}
     </div>
@@ -105,6 +119,33 @@
             <button type="submit" value="refuse{{.FromUserId}}" name="isLevelUp" >Refuse</button>
         </form>
         {{end}}
+        {{if .AllUsers}}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Id:</th>
+                    <th>Photo:</th>
+                    <th>Name:</th>
+                    <th>Email:</th>
+                    <th>Role:</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .AllUsers}}
+                <tr>
+                    <th>{{.Id}}</th>
+                    <th><img class="th-avatar-img" src="../static/useravatars/{{ .ImageURL }}" alt="{{ .ImageURL }}"></th>
+                    <th>{{.Username}}</th>
+                    <th>{{.Email}}</th>
+                    <th>{{.Rol}}<form method="POST" action="/profile/?id={{$.User.Id}}">
+                        <input type="hidden" name="form" value="changeRole">
+                        <button type="submit" value="up,{{.Rol}},{{.Id}}" name="isLevel" >Up</button>
+                        <button type="submit" value="down,{{.Rol}},{{.Id}}"  name="isLevel" >Down</button>
+                    </form></th>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>{{end}}
     </div>
     {{end}}
 

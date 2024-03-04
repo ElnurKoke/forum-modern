@@ -16,7 +16,7 @@ type PostIR interface {
 	GetAllPostsByCategories(category string) ([]models.Post, error)
 	GetMyPost(id int) ([]models.Post, error)
 	GetMyLikedPost(id int) ([]models.Post, error)
-
+	GetAllWaitPosts() ([]models.Post, error)
 	DeletePost(id int) error
 	UpdatePost(post models.Post) error
 }
@@ -90,7 +90,33 @@ func (p *PostStorage) GetAllPosts() ([]models.Post, error) {
 	query := `
 		SELECT post.id, user.username, post.title, post.description, post.imageURL, post.likes, post.dislikes, post.category, post.created_at
 		FROM post
-		LEFT JOIN user ON post.author_id = user.id;`
+		LEFT JOIN user ON post.author_id = user.id
+		WHERE post.status = "done";`
+	row, err := p.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("storage: get all posts: %w", err)
+	}
+	for row.Next() {
+		var post models.Post
+		var categoriesStr string
+		if err := row.Scan(&post.Id, &post.Author, &post.Title, &post.Description, &post.Image, &post.Likes, &post.Likes, &categoriesStr, &post.CreateAt); err != nil {
+			return nil, fmt.Errorf("storage: get all posts: %w", err)
+		}
+		post.Category = strings.Split(categoriesStr, ", ")
+
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
+
+func (p *PostStorage) GetAllWaitPosts() ([]models.Post, error) {
+	posts := []models.Post{}
+	query := `
+		SELECT post.id, user.username, post.title, post.description, post.imageURL, post.likes, post.dislikes, post.category, post.created_at
+		FROM post
+		LEFT JOIN user ON post.author_id = user.id
+		WHERE post.status = "waiting";`
 	row, err := p.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("storage: get all posts: %w", err)
@@ -166,7 +192,8 @@ func (p *PostStorage) GetPostByID(id int) (models.Post, error) {
 			post.created_at, 
 			post.likes, 
 			post.dislikes ,
-			post.category
+			post.category,
+			post.status
 		FROM post
 		LEFT JOIN user 
 		ON post.author_id = user.id
@@ -175,7 +202,7 @@ func (p *PostStorage) GetPostByID(id int) (models.Post, error) {
 	var post models.Post
 	var categoriesStr string
 	if err := row.Scan(&post.Id, &post.UserId, &post.Author, &post.Title, &post.Description,
-		&post.Image, &post.CreateAt, &post.Likes, &post.Dislikes, &categoriesStr); err != nil {
+		&post.Image, &post.CreateAt, &post.Likes, &post.Dislikes, &categoriesStr, &post.Status); err != nil {
 		return models.Post{}, err
 	}
 	post.Category = strings.Split(categoriesStr, ", ")
@@ -204,13 +231,13 @@ func (p *PostStorage) GetMyPost(id int) ([]models.Post, error) {
 		u.id = $1`
 	row, err := p.db.Query(query, id)
 	if err != nil {
-		return nil, fmt.Errorf("storage: get all posts: %w", err)
+		return nil, fmt.Errorf("storage: get my all posts: %w", err)
 	}
 	for row.Next() {
 		var post models.Post
 		var categoriesStr string
 		if err := row.Scan(&post.Id, &post.Author, &post.Title, &post.Description, &post.Image, &post.Likes, &post.Likes, &categoriesStr, &post.CreateAt); err != nil {
-			return nil, fmt.Errorf("storage: get all posts: %w", err)
+			return nil, fmt.Errorf("storage: get all my posts: %w", err)
 		}
 		post.Category = strings.Split(categoriesStr, ", ")
 		posts = append(posts, post)
@@ -242,16 +269,16 @@ func (p *PostStorage) GetMyLikedPost(id int) ([]models.Post, error) {
 	ON
 		lp.postId = p.id
 	WHERE  
-		lp.userId = $1 AND lp.like1 = 1`
+		lp.userId = $1 AND lp.like1 = 1 AND p.status = "done";`
 	row, err := p.db.Query(query, id)
 	if err != nil {
-		return nil, fmt.Errorf("storage: get all posts: %w", err)
+		return nil, fmt.Errorf("storage: get all liked posts: %w", err)
 	}
 	for row.Next() {
 		var post models.Post
 		var categoriesStr string
 		if err := row.Scan(&post.Id, &post.Author, &post.Title, &post.Description, &post.Image, &post.Likes, &post.Likes, &categoriesStr, &post.CreateAt); err != nil {
-			return nil, fmt.Errorf("storage: get all posts: %w", err)
+			return nil, fmt.Errorf("storage: get all liked posts: %w", err)
 		}
 		post.Category = strings.Split(categoriesStr, ", ")
 

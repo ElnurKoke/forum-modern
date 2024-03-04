@@ -10,11 +10,11 @@ body {
   padding: 0;
   margin: 0;
 }
-@media (min-width: 3000px) {
+/* @media (min-width: 3000px) {
   body {
     background: url('jpg/oboi.jpg') repeat;
   }
-}
+} */
 header {
   position: fixed;
   top: 0;

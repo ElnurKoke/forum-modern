@@ -51,6 +51,7 @@ type Post struct {
 	Author      string
 	Likes       int
 	Dislikes    int
+	Status      string
 	CreateAt    time.Time
 }
 
