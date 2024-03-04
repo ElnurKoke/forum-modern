@@ -26,10 +26,20 @@ func NewUserStorage(db *sql.DB) *UserStorage {
 }
 
 func (u *UserStorage) GetUserByToken(token string) (models.User, error) {
-	query := `SELECT id, email, username, expiresAt FROM user WHERE session_token = $1;`
+	query := `SELECT 
+			id, 
+			email, 
+			username, 
+			imageBack,
+			imageURL,
+			rol,
+			bio,
+			expiresAt
+		FROM user 
+		WHERE session_token = $1;`
 	row := u.db.QueryRow(query, token)
 	var user models.User
-	if err := row.Scan(&user.Id, &user.Email, &user.Username, &user.ExpiresAt); err != nil {
+	if err := row.Scan(&user.Id, &user.Email, &user.Username, &user.ImageBack, &user.ImageURL, &user.Rol, &user.Bio, &user.ExpiresAt); err != nil {
 		return models.User{}, err
 	}
 	return user, nil
@@ -43,12 +53,13 @@ func (u *UserStorage) GetUserById(id int) (models.User, error) {
 			imageBack,
 			imageURL,
 			rol,
-			bio
+			bio,
+			expiresAt
 		FROM user 
 		WHERE id = $1;`
 	row := u.db.QueryRow(query, id)
 	var user models.User
-	if err := row.Scan(&user.Id, &user.Email, &user.Username, &user.ImageBack, &user.ImageURL, &user.Rol, &user.Bio); err != nil {
+	if err := row.Scan(&user.Id, &user.Email, &user.Username, &user.ImageBack, &user.ImageURL, &user.Rol, &user.Bio, &user.ExpiresAt); err != nil {
 		return models.User{}, err
 	}
 	return user, nil

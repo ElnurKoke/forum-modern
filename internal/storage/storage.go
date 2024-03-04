@@ -9,15 +9,17 @@ type Storage struct {
 	CommentIR
 	ReactionIR
 	NotificationIR
+	CommunicationIR
 }
 
 func NewStorage(db *sql.DB) *Storage {
 	return &Storage{
-		Auth:           NewAuthStorage(db),
-		PostIR:         NewPostStorage(db),
-		User:           NewUserStorage(db),
-		CommentIR:      newCommentStorage(db),
-		ReactionIR:     NewEmotionSQL(db),
-		NotificationIR: NewNotificationStorage(db),
+		Auth:            NewAuthStorage(db),
+		PostIR:          NewPostStorage(db),
+		User:            NewUserStorage(db),
+		CommentIR:       newCommentStorage(db),
+		ReactionIR:      NewEmotionSQL(db),
+		NotificationIR:  NewNotificationStorage(db),
+		CommunicationIR: NewCommunicationStore(db),
 	}
 }

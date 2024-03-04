@@ -9,9 +9,16 @@
     <link rel="stylesheet" href="../static/profile.css">
 </head>
 
-<body>
-    <nav><a  href="/">Forum</a></nav>
-    <div class="back">
+<body style="background: url('../static/jpg/art/{{.User.ImageBack}}') repeat;">
+    <header>
+        <nav>
+            <a href="/" style="color: rgb(255, 0, 119);"><h2>Profile</h2><span></span></a>
+            <a href="/" >Forum<span></span></a>
+            <a href="/">Forum<span></span></a>
+            <a href="/">About<span></span></a>
+        </nav>
+    </header>
+    <!-- <div class="back">
     <input type="radio" name="background" id="background0" value="url('../static/jpg/art/black.png')" checked>
     <label for="background0">black</label>
     <input type="radio" name="background" id="background1" value="url('../static/jpg/art/81mg.gif')">
@@ -20,7 +27,7 @@
     <label for="background2">standard</label>
     <input type="radio" name="background" id="background3" value="url('../static/jpg/oboi2.jpg')">
     <label for="background3">standard 2</label>
-    </div>
+    </div> -->
     <div class="profile">
         <div class="avatar-container "><img class="avatar-img " src="../static/useravatars/{{ .ImageURL }}" alt="{{ .ImageURL }}"></div>
         {{if .Error}}
@@ -28,7 +35,7 @@
         {{end}}
         <h1>{{.User.Username}}</h1>
         <p>Name: {{.User.Username}}</p>
-        <p style="color: palevioletred;">Role: {{.User.Rol}}</p>
+        <p style="color: rgb(255, 0, 119);">Role: {{.User.Rol}}</p>
         <p>Email: {{.User.Email}}</p>
         <p>Bio: {{.User.Bio}}</p>
         <button id="editButton">Edit Profile</button>
@@ -41,9 +48,14 @@
             <label for="username">New name:</label>
             <input type="text" pattern="[\x20-\x7E]{6,36}" maxlength="36" id="username" name="username"  placeholder="Enter your new name"
             value="{{.User.Username}}" required>
+            <input type="hidden" name="form" value="username">
             <button type="submit" value="profile" >save</button>
         </form>
-        <p style="color: palevioletred;">Role: {{.User.Rol}}</p>
+        <p style="color: rgb(255, 0, 119);">Role: {{.User.Rol}}</p>
+        <form method="POST" action="/profile/?id={{.User.Id}}">
+            <input type="hidden" name="form" value="role">
+            <button type="submit" value="isLevelUp" name="isLevelUp" >Level Up</button>
+        </form>
         <p>Email: {{.User.Email}}</p>
         <p>Bio: {{.User.Bio}}</p>
         <button id="saveButton">Profile</button>
@@ -54,6 +66,47 @@
         <div class="post"><img class="avatar-img " src="../static/data/{{.Image}}" alt="Post 1"></div>
         {{end}}
     </div>
+    {{if eq .User.Rol "moderator"}}
+    <div class="askeds">
+        <h1>Hi Moderator</h1>
+        {{range .Askeds}}
+        <form method="POST" action="/profile/?id={{$.User.Id}}">
+            <p>{{.FromUserName}}- ask to raise his level to -{{.NewRole}}</p>
+            <input type="hidden" name="form" value="roleUp">
+            <button type="submit" value="accept{{.FromUserId}}" name="isLevelUp" >Accept</button>
+            <button type="submit" value="refuse{{.FromUserId}}" name="isLevelUp" >Refuse</button>
+        </form>
+        {{end}}
+    </div>
+    {{end}}
+
+    {{if eq .User.Rol "admin"}}
+    <div class="askeds">
+        <h1>Hi Administrator</h1>
+        {{range .Askeds}}
+        <form method="POST" action="/profile/?id={{$.User.Id}}">
+            <p>{{.FromUserName}}- ask to raise his level to -{{.NewRole}}</p>
+            <input type="hidden" name="form" value="roleUp">
+            <button type="submit" value="accept{{.FromUserId}}" name="isLevelUp" >Accept</button>
+            <button type="submit" value="refuse{{.FromUserId}}" name="isLevelUp" >Refuse</button>
+        </form>
+        {{end}}
+    </div>
+    {{end}}
+
+    {{if eq .User.Rol "king"}}
+    <div class="askeds">
+        <h1>Hi King</h1>
+        {{range .Askeds}}
+        <form method="POST" action="/profile/?id={{$.User.Id}}">
+            <p>{{.FromUserName}}- ask to raise his level to -{{.NewRole}}</p>
+            <input type="hidden" name="form" value="roleUp">
+            <button type="submit" value="accept{{.FromUserId}}" name="isLevelUp" >Accept</button>
+            <button type="submit" value="refuse{{.FromUserId}}" name="isLevelUp" >Refuse</button>
+        </form>
+        {{end}}
+    </div>
+    {{end}}
 
     <script>
         document.getElementById('editButton').addEventListener('click', function() {
@@ -66,18 +119,6 @@
             document.querySelector('.profile').style.display = 'block';
         });
 
-
-        window.onload = function() {
-        var radios = document.getElementsByName('background');
-        
-        for (var i = 0; i < radios.length; i++) {
-            radios[i].addEventListener('change', function() {
-                if (this.checked) {
-                    document.body.style.backgroundImage = this.value;
-                }
-            });
-        }
-        };
     </script>
 </body>
 </html>

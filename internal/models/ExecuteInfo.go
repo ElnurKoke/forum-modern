@@ -32,4 +32,5 @@ type ProfileInfo struct {
 	Error       string
 	ProfileUser User
 	Posts       []Post
+	Askeds      []Communication
 }

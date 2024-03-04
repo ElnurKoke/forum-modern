@@ -7,14 +7,27 @@ CREATE TABLE IF NOT EXISTS user (
 	expiresAt DATETIME DEFAULT NULL,
 	imageBack TEXT DEFAULT 'black.png',
 	imageURL TEXT DEFAULT 'ava.jpg',
-	rol INT DEFAULT 'user',
+	rol TEXT DEFAULT 'user',
 	bio TEXT DEFAULT 'hey i am new user',
 	created_at DATE DEFAULT (datetime('now','localtime')),
     updated_at DATE DEFAULT (datetime('now','localtime'))
 );
 
 
--- DROP TABLE IF EXISTS likesComment;
--- DROP TABLE IF EXISTS likesPost;
--- DROP TABLE IF EXISTS comment;
--- DROP TABLE IF EXISTS post;
+INSERT INTO user (email,username,password) 
+SELECT 'elnursccc@gmail.com','great_king','$2a$10$NtyegXYqaRIpCCA9fA.uguuypOqOQM34O7sqRdrlBMrmRFu5cdIKq'
+WHERE NOT EXISTS (SELECT 1 FROM user WHERE id = 1);
+UPDATE user SET rol = 'king' WHERE id= 1;
+UPDATE user SET imageURL = 'king.png' WHERE id= 1;
+
+INSERT INTO user (email,username,password) 
+SELECT 'prince1@gmail.com','prince','$2a$10$NtyegXYqaRIpCCA9fA.uguuypOqOQM34O7sqRdrlBMrmRFu5cdIKq'
+WHERE NOT EXISTS (SELECT 1 FROM user WHERE id = 2);
+UPDATE user SET rol = 'moderator' WHERE id= 2;
+UPDATE user SET imageURL = 'mdr.png' WHERE id= 2;
+
+INSERT INTO user (email,username,password) 
+SELECT 'queen1@gmail.com','great_queen','$2a$10$NtyegXYqaRIpCCA9fA.uguuypOqOQM34O7sqRdrlBMrmRFu5cdIKq'
+WHERE NOT EXISTS (SELECT 1 FROM user WHERE id = 3);
+UPDATE user SET rol = 'admin' WHERE id= 3;
+UPDATE user SET imageURL = 'admin.png' WHERE id= 3;

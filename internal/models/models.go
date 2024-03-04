@@ -65,6 +65,7 @@ type Message struct {
 	Message       string
 	Active        int
 	FromUserName  string
+	AvaImage      string
 	PostImage     string
 	FromUserImage string
 	CreateAt      time.Time
@@ -93,4 +94,21 @@ type Like struct {
 
 type Category struct {
 	Name string
+}
+
+type Communication struct {
+	Id            int
+	FromUserId    int
+	FromUserName  string
+	ForWhomRole   string
+	OldRole       string
+	NewRole       string
+	AboutUserId   int
+	AboutUserName string
+	PostId        int
+	PostImage     string
+	CommentId     int
+	CommentText   string
+	Message       string
+	CreatedAt     time.Time
 }

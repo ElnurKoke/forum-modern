@@ -9,15 +9,17 @@ type Service struct {
 	CommentServiceIR
 	EmotionServiceIR
 	ServiceMsgIR
+	CommunicationServiceIR
 }
 
 func NewService(storages *storage.Storage) *Service {
 	return &Service{
-		Auth:             NewAuthService(storages),
-		ServicePostIR:    NewPostService(storages.PostIR),
-		User:             NewUserService(storages),
-		CommentServiceIR: newCommentServ(storages.CommentIR),
-		EmotionServiceIR: NewEmotionService(storages.ReactionIR),
-		ServiceMsgIR:     NewServiceMsg(storages.NotificationIR),
+		Auth:                   NewAuthService(storages),
+		ServicePostIR:          NewPostService(storages.PostIR),
+		User:                   NewUserService(storages),
+		CommentServiceIR:       newCommentServ(storages.CommentIR),
+		EmotionServiceIR:       NewEmotionService(storages.ReactionIR),
+		ServiceMsgIR:           NewServiceMsg(storages.NotificationIR),
+		CommunicationServiceIR: NewCommunicationService(storages.CommunicationIR),
 	}
 }
