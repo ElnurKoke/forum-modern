@@ -12,6 +12,9 @@ type ServicePostIR interface {
 	GetPostId(id int) (models.Post, error)
 	GetAllPosts() ([]models.Post, error)
 	GetCategories() ([]models.Category, error)
+	AddCategory(name string) error
+	DeleteCategory(name string) error
+
 	GetAllPostsByCategories(category string) ([]models.Post, error)
 	GetMyPost(int) ([]models.Post, error)
 	GetMyLikePost(int) ([]models.Post, error)
@@ -29,6 +32,14 @@ func NewPostService(postIR storage.PostIR) ServicePostIR {
 	return &PostService{
 		storage: postIR,
 	}
+}
+
+func (p *PostService) DeleteCategory(name string) error {
+	return p.storage.DeleteCategory(name)
+}
+
+func (p *PostService) AddCategory(name string) error {
+	return p.storage.AddCategory(name)
 }
 
 func (p *PostService) DeletePost(id int) error {

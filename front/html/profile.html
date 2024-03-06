@@ -145,6 +145,26 @@
 
     {{if eq .User.Rol "king"}}
     <div class="askeds">
+        <h3>All allowed categories</h3>
+        {{range .AllCategory}}
+        <div class="item">
+            <span>{{.Name}}</span>
+            <form method="POST" action="/profile/?id={{$.User.Id}}">
+                <input type="hidden" name="form" value="delCat">
+                <button type="submit" value="{{.Name}}" name="name" class="delete-button">
+                    <img  src="../static/jpg/delete.png" alt="Delete" title="Delete">
+                </button>
+            </form>
+        </div>
+        {{end}}
+        <div class="addcat">
+            <span>New category </span>
+            <form action="/profile/?id={{$.User.Id}}" method="post">
+                <input type="hidden" name="form" value="addCat">
+                <input  type="text"  id="text" name="text" maxlength="100" placeholder="Enter you cat..." required>
+                <button type="submit" >add</button>
+            </form>
+        </div>
         <h3>All control</h3>
         {{range .Askeds}}
         <form method="POST" action="/profile/?id={{$.User.Id}}">

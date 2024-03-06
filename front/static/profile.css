@@ -209,3 +209,60 @@ thead{
     height: 40px;
     object-fit: cover; /* Сделать изображение вписывающимся, без искажения */
 }
+
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    /* justify-items: baseline; */
+}
+
+.delete-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+}
+
+.delete-button img {
+    width: 28px; /* Adjust the width as needed */
+    height: 28px; /* Adjust the height as needed */
+    vertical-align: middle;
+}
+.addcat {
+    display: flex;
+    /* justify-items: baseline; */
+}
+
+.addcat span{
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: rgb(255, 0, 119);
+    font-size: 18px;
+    font-family: "Motiva Sans", "Twemoji", "Noto Sans", Helvetica, sans-serif;
+    font-weight: bold;
+    margin: 0 10px; 
+}
+
+/* Стили для поля ввода */
+input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px; /* Ширина поля ввода */
+}
+  /* Стили для кнопки */
+.addcat button[type="submit"] {
+    padding: 5px 10px;
+    background-color: #007bff; /* Цвет фона кнопки */
+    color: #fff; /* Цвет текста кнопки */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Плавное изменение цвета фона при наведении */
+}
+.addcat button[type="submit"]:hover {
+    background-color: #0056b3; /* Цвет фона кнопки при наведении */
+}

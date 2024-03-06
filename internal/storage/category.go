@@ -67,3 +67,23 @@ func (p *PostStorage) GetAllPostsByCategories(category string) ([]models.Post, e
 
 	return posts, nil
 }
+
+func (p *PostStorage) DeleteCategory(name string) error {
+	query := `DELETE FROM hashtags WHERE hashtag = $1;`
+	_, err := p.db.Exec(query, name)
+	if err != nil {
+		models.ErrLog.Println(err)
+		return err
+	}
+	return nil
+}
+
+func (p *PostStorage) AddCategory(name string) error {
+	query := `INSERT INTO hashtags (hashtag) VALUES ($1);`
+	_, err := p.db.Exec(query, name)
+	if err != nil {
+		models.ErrLog.Println(err)
+		return err
+	}
+	return nil
+}

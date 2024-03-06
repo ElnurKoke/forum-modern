@@ -65,6 +65,13 @@ func (h *Handler) profilePage(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		model.AllUsers = alluser
+		allcat, err := h.Service.ServicePostIR.GetCategories()
+		if err != nil {
+			h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			models.ErrLog.Println(err)
+			return
+		}
+		model.AllCategory = allcat
 	} else if user.Rol == "moderator" {
 		waitPosts, err := h.Service.ServicePostIR.GetAllWaitPosts()
 		if err != nil {
@@ -233,6 +240,36 @@ func (h *Handler) profilePage(w http.ResponseWriter, r *http.Request) {
 			}
 		} else if r.FormValue("form") == "bio" { //---------------------------------------------------------------------bio edit
 		} else if r.FormValue("form") == "ava" { //---------------------------------------------------------------------ava edit
+		} else if r.FormValue("form") == "delCat" { //---------------------------------------------------------------------ava edit
+			if user.Rol != "king" {
+				h.ErrorPage(w, "your role is not suitable", http.StatusBadRequest)
+				return
+			}
+			nameCategory := r.FormValue("name")
+			if err := h.Service.ServicePostIR.DeleteCategory(nameCategory); err != nil {
+				h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+			link := fmt.Sprintf("/profile/?id=%d", user.Id)
+			http.Redirect(w, r, link, http.StatusSeeOther)
+		} else if r.FormValue("form") == "addCat" { //---------------------------------------------------------------------ava edit
+			if user.Rol != "king" {
+				h.ErrorPage(w, "your role is not suitable", http.StatusBadRequest)
+				return
+			}
+			nameCategory := r.FormValue("text")
+			for _, exist := range model.AllCategory {
+				if nameCategory == exist.Name {
+					h.ErrorPage(w, "Category allready exists", http.StatusBadRequest)
+					return
+				}
+			}
+			if err := h.Service.ServicePostIR.AddCategory(nameCategory); err != nil {
+				h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+			link := fmt.Sprintf("/profile/?id=%d", user.Id)
+			http.Redirect(w, r, link, http.StatusSeeOther)
 		} else if r.FormValue("form") == "modAns" { //-------------------------------------------------------------------reply moder mess
 			if user.Rol != "admin" {
 				h.ErrorPage(w, "your role is not suitable", http.StatusBadRequest)

@@ -13,6 +13,8 @@ type PostIR interface {
 	GetPostByID(id int) (models.Post, error)
 	GetAllPosts() ([]models.Post, error)
 	Category() ([]models.Category, error)
+	AddCategory(name string) error
+	DeleteCategory(name string) error
 	GetAllPostsByCategories(category string) ([]models.Post, error)
 	GetMyPost(id int) ([]models.Post, error)
 	GetMyLikedPost(id int) ([]models.Post, error)

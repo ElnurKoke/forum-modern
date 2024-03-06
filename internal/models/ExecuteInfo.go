@@ -36,4 +36,5 @@ type ProfileInfo struct {
 	Askeds      []Communication
 	RoleMsgs    []Communication
 	AllUsers    []User
+	AllCategory []Category
 }
