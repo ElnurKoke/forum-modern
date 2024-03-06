@@ -34,5 +34,6 @@ type ProfileInfo struct {
 	Posts       []Post
 	WaitPosts   []Post
 	Askeds      []Communication
+	RoleMsgs    []Communication
 	AllUsers    []User
 }

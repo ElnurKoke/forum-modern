@@ -111,5 +111,6 @@ type Communication struct {
 	CommentId     int
 	CommentText   string
 	Message       string
+	MessageCode   string
 	CreatedAt     time.Time
 }

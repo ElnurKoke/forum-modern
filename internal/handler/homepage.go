@@ -6,7 +6,6 @@ import (
 	"forum/internal/models"
 	"log"
 	"net/http"
-	"sort"
 )
 
 func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +59,7 @@ func (h *Handler) homePage(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	sort.Sort(ByCreatedAt(posts))
+
 	info := models.InfoPosts{
 		user,
 		posts,

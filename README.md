@@ -2,6 +2,20 @@
 
 Now each user has his own personal profile
 
+## King
+- **delete or add category**
+- **promote or demote any user,moderator,admin**
+- **delete any comment or post**
+## Admin
+- **respond to moderators**
+- **promote or demote user and moderator**
+- **delete any comment or post**
+## Moderator
+- **accept posts**
+- **send reports to admin**
+- **promote user**
+
+
 Security is an important part of web forum development. First of all, we create a self-signed certificate for ourselves. The openssl utility will help with this. We created a private key for ourselves generated using the RSA cryptoalgorithm. Now the connection to the browser is via the TLS protocol, and there we will indicate which certificates to use.
 We will set a time limit for the request and response to avoid DOS attacks.
 

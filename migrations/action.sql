@@ -26,31 +26,35 @@ INSERT INTO hashtags (hashtag) VALUES ('Other');
 
 INSERT INTO post(title, description, imageURL, author_id, category)
 SELECT 'Welcome my new user', 
-'I am not an admin, 
-but I am a king 
-login: great_king 
-password: 123qweASD!@#', 
-'test.png', 1, 'king message'
+'King 
+login: great_king  
+Password: 123qweASD!@# 
+
+Admin 
+login: great_queen  
+Password: 123qweASD!@# 
+
+Moderator 
+login: prince  
+Password: 123qweASD!@# 
+', 
+'z-roles.png', 1, 'king message'
 WHERE NOT EXISTS (
     SELECT * FROM post WHERE category = 'king message'
 );
 
 INSERT INTO post(title, description, imageURL, author_id, category)
-SELECT 'Hello new user', 
-'Admin, 
-login: great_queen 
-password: 123qweASD!@#',
-'test.png', 1, 'king message 2'
+SELECT 'Infoooo', 
+'Your role may be increased or lowered; those who have a higher role may be removed.',
+'z-test.png', 1, 'king message 2'
 WHERE NOT EXISTS (
     SELECT * FROM post WHERE category = 'king message 2'
 );
 
 INSERT INTO post(title, description, imageURL, author_id, category)
-SELECT 'Hi new user', 
-'Moderator, 
-login: prince 
-password: 123qweASD!@#',
-'test.png', 1, 'king message 3'
+SELECT 'Violation may result in banning you', 
+'Do not create posts or write comments related to sex, politics, religion, violence, drugs',
+'z-block.png', 1, 'king message 3'
 WHERE NOT EXISTS (
     SELECT * FROM post WHERE category = 'king message 3'
 );

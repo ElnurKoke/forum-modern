@@ -49,7 +49,7 @@ func (ns *NotificationStorage) CreateMassagePost(mes models.Message) error {
 func (ns *NotificationStorage) CreateMassageUpRole(mes models.Message) error {
 	mes.CreateAt = time.Now()
 	query := `INSERT INTO notification(post_id,  to_user_id , from_user_id,  message, created_at) VALUES ($1, $2, $3, $4, $5);`
-	_, err := ns.db.Exec(query, 1, mes.ToUserId, mes.FromUserId, mes.Message, mes.CreateAt)
+	_, err := ns.db.Exec(query, 2, mes.ToUserId, mes.FromUserId, mes.Message, mes.CreateAt)
 	if err != nil {
 		return err
 	}
@@ -183,7 +183,11 @@ func ConvertMessageAction(mes string) string {
 	case "cc":
 		return "You create comment"
 	case "upRole":
-		return "You promoted the role of one user"
+		return "upgraded the role of one user"
+	case "noRole":
+		return "You refused to level up the role of one user"
+	case "downRole":
+		return "You demoted the user"
 	default:
 		return "not have code message"
 	}
@@ -202,7 +206,11 @@ func ConvertMessageAuthor(mes string) string {
 	case "cc":
 		return "user create comment on your post"
 	case "upRole":
-		return "your role has been changed"
+		return "your role has been upgraded"
+	case "noRole":
+		return "you were refused to level up, but do not worry, you can try again later"
+	case "downRole":
+		return "your role has been demoted, it seems you did a bad job"
 	default:
 		return "not have code message"
 	}

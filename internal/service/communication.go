@@ -11,6 +11,7 @@ type CommunicationServiceIR interface {
 	CreateCommunication(mes models.Communication) error
 	AskRole(mes models.Communication) error
 	GetAllAsks(role string) ([]models.Communication, error)
+	GetCommunication(role string) ([]models.Communication, error)
 	UpUserRole(id int, newrole string) error
 	ConfirmPost(id int, action string) error
 	DeleteAskRole(id int) error
@@ -35,6 +36,10 @@ func (c *CommunicationService) ConfirmPost(id int, action string) error {
 
 func (c *CommunicationService) GetAllAsks(role string) ([]models.Communication, error) {
 	return c.storage.GetAllAsks(role)
+}
+
+func (c *CommunicationService) GetCommunication(role string) ([]models.Communication, error) {
+	return c.storage.GetCommunication(role)
 }
 
 func (c *CommunicationService) UpUserRole(id int, newrole string) error {

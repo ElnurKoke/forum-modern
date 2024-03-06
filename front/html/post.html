@@ -10,7 +10,7 @@
 </head>
 <body>
 	<header>
-		{{if .User.IsAuth}}
+		{{if $IsAuth}}
 		<nav>
 			<h1>Post page</h1>
 		</nav>
@@ -23,6 +23,46 @@
 	<div class="home"> 
 		<a href="/" id="home"><img src="../static/jpg/home.png"></a> 
 	</div>
+
+{{if eq .Post.Status "waiting"}}				
+	<section>
+		<div class="container">
+		<div class="post">
+			<h2 style="color: rgb(255, 115, 0);">The post is not active yet as it is awaiting permission from moderators</h2>
+			<h1 >{{ .Post.Title }}</h1>
+			<img src="../static/data/{{ .Post.Image }}" alt="{{ .Post.Image }}">
+			<p>{{ .Post.Description }}</p>
+			<p style="font-weight: bold;">Author: {{ .Post.Author }}</p>
+			<form  action="/delete/post/?id={{.Post.Id}}" method="post" onsubmit="return confirmDelete()">
+				<button type="submit" value="isDelete" name="isDelete" >
+					<img class="setting" src="../static/jpg/delete.png" alt="Edit" title="delete post">
+				</button>
+			</form>
+			<p>Likes: {{ .Post.Likes }}, Dislikes: {{ .Post.Dislikes }}</p>
+		</div>
+		</div>
+	</section>
+{{else if eq .Post.Status "delete"}}
+	<section>
+		<div class="container">
+		<div class="post">
+			<h2 style="color: red;">Perhaps your post contains content related to “sex, violence, politics, religion” and thats why it was blocked</h2>
+			<h1 >{{ .Post.Title }}</h1>
+			<img src="../static/data/{{ .Post.Image }}" alt="{{ .Post.Image }}">
+			<p>{{ .Post.Description }}</p>
+			<p style="font-weight: bold;">Author: {{ .Post.Author }}</p>
+			<form  action="/delete/post/?id={{.Post.Id}}" method="post" onsubmit="return confirmDelete()">
+				<button type="submit" value="isDelete" name="isDelete" >
+					<img class="setting" src="../static/jpg/delete.png" alt="Edit" title="delete post">
+				</button>
+			</form>
+			<p>Likes: {{ .Post.Likes }}, Dislikes: {{ .Post.Dislikes }}</p>
+		</div>
+		</div>
+	</section>
+{{else}}
+	
+
 		{{if eq .User.Username .Post.Author}}
 			<div class="edit"> 
 				<button id="toggleButton"><img src="../static/jpg/edit.png" alt="Edit" title="edit post"></button>	
@@ -63,14 +103,12 @@
 	<section>
 		<div class="container">
 		<div class="post">
-			{{if eq .Post.Status "waiting"}}
-				<h2 style="color: red;">The post is not active yet as it is awaiting permission from moderators</h2>
-			{{end}}
+			
 			<h1 >{{ .Post.Title }}</h1>
 			<img src="../static/data/{{ .Image }}" alt="{{ .Image }}">
 			<p>{{ .Post.Description }}</p>
 			<p style="font-weight: bold;">Author: {{ .Post.Author }}</p>
-			{{if eq .User.Username .Post.Author}}
+			{{if or (eq .User.Username .Post.Author) (eq .User.Rol "admin") (eq .User.Rol "king")}}
 			<form  action="/delete/post/?id={{.Post.Id}}" method="post" onsubmit="return confirmDelete()">
 				<button type="submit" value="isDelete" name="isDelete" >
 					<img class="setting" src="../static/jpg/delete.png" alt="Edit" title="delete post">
@@ -87,6 +125,15 @@
 					<img class="setting" src="../static/jpg/dislike.png" alt="Edit"></button>
 			</form>
 			{{ end }}
+			
+			{{if eq $.User.Rol "moderator"}}
+				<form action="/profile/?id={{$.User.Id}}" method="post">
+					<input type="hidden" name="form" value="badPost">
+					<input type="hidden" name="post_id" value="{{$PostID}}">
+					<input  type="text"  id="text" name="text" maxlength="100" placeholder="Enter message for admin..." required>
+					<button type="submit" class="publish-button"><img src="../static/jpg/waining.png" alt="Publish Icon"></button>
+				</form>
+			{{end}}
 		</div>
 		<h2 style="text-align: right;">Comments : </h2>
 		<div class="comments">
@@ -106,7 +153,7 @@
 									<img class="setting" src="../static/jpg/dislike.png" alt="Edit"></button>
 							</form>
 						{{ end }}
-						{{if eq $.User.Username .Creator}}
+						{{if or (eq $.User.Username .Creator) (eq $.User.Rol "admin") (eq $.User.Rol "king")}}
 							<form action="/delete/comment/?id={{.Id}}&postid={{$PostID}}" method="post" onsubmit="return confirmDelete()">
 								<button type="submit" value="isDelete" name="isDelete" >
 									<img class="setting" src="../static/jpg/delete.png" alt="Edit" title="delete comment">
@@ -114,6 +161,17 @@
 							</form>
 							<a href="/comment/?id={{.Id}}&postid={{$PostID}}" class="setting">
 								<img class="setting" src="../static/jpg/edit.png" alt="Edit" title="edit comment"></a>
+						{{end}}
+					</li>
+					<li>
+						{{if eq $.User.Rol "moderator"}}
+							<form action="/profile/?id={{$.User.Id}}" method="post">
+								<input type="hidden" name="form" value="badComment">
+								<input type="hidden" name="comment_id" value="{{.Id}}">
+								<input type="hidden" name="post_id" value="{{$PostID}}">
+								<input  type="text"  id="text" name="text" maxlength="100" placeholder="Enter message for admin..." required>
+								<button type="submit" class="publish-button"><img src="../static/jpg/waining.png" alt="Publish Icon"></button>
+							</form>
 						{{end}}
 					</li>
 				{{ end }}
@@ -141,7 +199,7 @@
 			
 		</div>
 	</footer>
-
+{{end}}
 	<script>
 		var fragment = window.location.hash.substring(1);
 		

@@ -210,14 +210,15 @@ nav a:hover span{
 }
 
 .about-link img {
-  width: 50px; /* Регулируйте размер иконки по вашему усмотрению */
+  width: 70px; 
   height: auto;
+  border: 5px solid #1da1f2;
+  box-shadow: 0 0 10px rgb(0, 118, 187);
   border-radius: 50%;
-  filter: invert(1);
 }
 
 .about-link:hover img {
-  transform: scale(1.1)
+  transform: scale(1.05)
 }
 
 .gif-container {

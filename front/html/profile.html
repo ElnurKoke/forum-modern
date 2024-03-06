@@ -68,11 +68,23 @@
         </a>
         {{end}}
     </div>
-    <div id="control"></div>
+{{if ne .User.Rol "user"}}
+<div class="work-space"  id="control">
+
+    <img src="../static/jpg/edit.png" alt="Edit" title="control space" >
+    
     {{if eq .User.Rol "moderator"}}
     <div class="askeds">
+        <h3>Admins messages</h3>
+        {{range .RoleMsgs}}
+            <li>
+            <p><span style="color: rgb(255, 0, 119);">{{.FromUserName}}</span>(administrator)->
+                <span style="color: orange;"> Answered: </span> {{.Message}} ->
+                <a style="text-decoration: none; color: orange;" href="/post/?id={{.PostId}}">Post/Comment place</a></p>
+            </li>
+        {{end}}
 
-        <h2>Asks Roles:</h2>
+        <h3>Requests for the role</h3>
         {{range .Askeds}}
         <form method="POST" action="/profile/?id={{$.User.Id}}">
             <p>{{.FromUserName}}- ask to raise his level to -{{.NewRole}}</p>
@@ -82,7 +94,7 @@
         </form>
         {{end}}
 
-        <h2>Accept create posts:</h2>
+        <h3>Accept create posts</h3>
         {{range .WaitPosts}}
         <form method="POST" action="/profile/?id={{$.User.Id}}">
             <p>{{.Author}}- ask to permission to create a post: -{{.Title}}</p>
@@ -95,8 +107,31 @@
     {{end}}
 
     {{if eq .User.Rol "admin"}}
+    <!-- <a href="/profile/?id={{$.User.Id}}&show=modMsg" >Show moderators messages</a> -->
     <div class="askeds">
-        <h1>Hi Administrator</h1>
+        <h3>Moderators messages</h3>
+        {{range .RoleMsgs}}
+            <li>
+            {{if .CommentId}}
+            <p><span style="color: rgb(255, 0, 119);">{{.FromUserName}}</span>(moderator)->
+                <span style="color: orange;"> Message:</span> {{.Message}} ->
+                <a style="text-decoration: none; color: orange;" href="/post/?id={{.PostId}}#comment{{.CommentId}}">Comment</a></p>
+            {{else}}
+            <p><span style="color: rgb(255, 0, 119);">{{.FromUserName}}</span>(moderator)->
+                <span style="color: orange;"> Message:</span> {{.Message}} ->
+                <a style="text-decoration: none; color: orange;" href="/post/?id={{.PostId}}">Post</a></p>
+            {{end}}
+            <form action="/profile/?id={{$.User.Id}}" method="post">
+                <input type="hidden" name="form" value="modAns">
+                <input type="hidden" name="post_id" value="{{.PostId}}">
+                <input type="hidden" name="info" value="Moderator:{{.FromUserName}}->Message:{{.Message}}">
+                <input  type="text"  id="text" name="text" maxlength="100" placeholder="Reply to a message..." required>
+                <button type="submit" >reply</button>
+            </form>
+            </li>
+        {{end}}
+
+        <h3>Requests for the role</h3>
         {{range .Askeds}}
         <form method="POST" action="/profile/?id={{$.User.Id}}">
             <p>{{.FromUserName}}- ask to raise his level to -{{.NewRole}}</p>
@@ -110,7 +145,7 @@
 
     {{if eq .User.Rol "king"}}
     <div class="askeds">
-        <h1>Hi King</h1>
+        <h3>All control</h3>
         {{range .Askeds}}
         <form method="POST" action="/profile/?id={{$.User.Id}}">
             <p>{{.FromUserName}}- ask to raise his level to -{{.NewRole}}</p>
@@ -148,7 +183,8 @@
         </table>{{end}}
     </div>
     {{end}}
-
+</div>
+{{end}}
     <script>
         document.getElementById('editButton').addEventListener('click', function() {
             document.querySelector('.profile').style.display = 'none';

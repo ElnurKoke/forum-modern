@@ -91,7 +91,8 @@ func (p *PostStorage) GetAllPosts() ([]models.Post, error) {
 		SELECT post.id, user.username, post.title, post.description, post.imageURL, post.likes, post.dislikes, post.category, post.created_at
 		FROM post
 		LEFT JOIN user ON post.author_id = user.id
-		WHERE post.status = "done";`
+		WHERE post.status = "done"
+		ORDER BY post.created_at DESC LIMIT 20;`
 	row, err := p.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("storage: get all posts: %w", err)
@@ -116,7 +117,8 @@ func (p *PostStorage) GetAllWaitPosts() ([]models.Post, error) {
 		SELECT post.id, user.username, post.title, post.description, post.imageURL, post.likes, post.dislikes, post.category, post.created_at
 		FROM post
 		LEFT JOIN user ON post.author_id = user.id
-		WHERE post.status = "waiting";`
+		WHERE post.status = "waiting"
+		ORDER BY post.created_at ASC LIMIT 20;`
 	row, err := p.db.Query(query)
 	if err != nil {
 		return nil, fmt.Errorf("storage: get all posts: %w", err)

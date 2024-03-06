@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"forum/internal/models"
-	"log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -22,22 +21,35 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 
 	userValue := r.Context().Value("user")
 	if userValue == nil {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		h.ErrorPage(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
 
 	user, ok := userValue.(models.User)
 	if !ok {
-		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
+		h.ErrorPage(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
 
 	post, err := h.Service.ServicePostIR.GetPostId(id)
 	if err != nil {
 		h.ErrorPage(w, models.ErrPostNotFound.Error(), http.StatusNotFound)
-		log.Println(err.Error())
+		models.ErrLog.Println(err.Error())
 		return
 	}
+
+	if !user.IsAuth {
+		if post.Status != "done" {
+			h.ErrorPage(w, "Bad request or post not exist", http.StatusBadRequest)
+			return
+		}
+	} else {
+		if post.Status != "done" && user.Rol == "user" && user.Id != post.UserId {
+			h.ErrorPage(w, "Bad request or post not exist", http.StatusBadRequest)
+			return
+		}
+	}
+
 	comments, err := h.Service.GetCommentsByIdPost(id)
 	if err != nil {
 		h.ErrorPage(w, err.Error(), http.StatusInternalServerError)
@@ -58,7 +70,7 @@ func (h *Handler) postPage(w http.ResponseWriter, r *http.Request) {
 			AllCategory: categories,
 		}
 		if err := h.Temp.ExecuteTemplate(w, "post.html", model); err != nil {
-			log.Println(err.Error())
+			models.ErrLog.Println(err.Error())
 			h.ErrorPage(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}

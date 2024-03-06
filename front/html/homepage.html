@@ -11,7 +11,7 @@
     <nav>
       <a id="usernameLink" href="/" style="color: rgb(68, 217, 236);"><h1>{{.Username}}</h1><span></span></a>
             <a href="/post/myLikedPost">My Liked Posts<span></span></a>
-            <a href="/notification">Status<span></span></a>
+            <a href="/notification">Activity<span></span></a>
             <a href="/post/myPost">My Posts<span></span></a>
             <a href="/post/create">Create Post<span></span></a>
             <a href="/logout">Logout<span></span></a>
@@ -26,8 +26,8 @@
     {{end}}
   </header>
   {{if .User.IsAuth}}
-  <a href="/about" class="about-link">
-    <img src="../static/jpg/02.png" alt="About">
+  <a href="/profile/?id={{.User.Id}}" class="about-link">
+    <img src="../static/useravatars/{{.ImageURL}}" alt="About">
   </a>
 
   {{end}}
@@ -36,12 +36,9 @@
         <p></p>
         <p></p>
     </div>
-  <div class="gif-container">
-      <img src="../static/jpg/longPress1.gif" alt="Animation">
-  </div>
 
   <section>
-    <p style="color: rgb(255, 189, 67);">Under development: To get to your profile, press and hold your username </p>
+    <p style="color: rgb(255, 189, 67);">To get to your profile, press and hold your username </p>
     {{range .Posts}}
       <div class="container">
         <a href="/post/?id={{.Id}}" class="cont">

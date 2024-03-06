@@ -74,14 +74,14 @@ body {
 
   .edit {
     margin: auto;
-    position: fixed; /* фиксированное позиционирование */
-    top: 3.5%; /* расположение сверху на 50% от верхней границы окна браузера */
-    left: 50%; /* расположение слева на 50% от левой границы окна браузера */
-    transform: translate(-50%, -50%); /* сдвигаем элемент назад на 50% его ширины и высоты */
-    text-align: center; /* для выравнивания текста по центру, если это применимо */
-    display: flex; /* для использования flexbox */
-    justify-content: center; /* для выравнивания по горизонтали */
-    align-items: center; /* для выравнивания по вертикали */
+    position: fixed; 
+    top: 3.5%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    text-align: center; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
     filter: brightness(0) invert(1);
   }
 
@@ -89,11 +89,11 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    transition: transform 0.3s ease; /* Добавляем анимацию transform с продолжительностью 0.3 секунды и функцией сглаживания ease */
+    transition: transform 0.3s ease; 
 }
 
 #toggleButton:hover {
-    transform: scale(1.2); /* Увеличиваем масштаб при наведении */
+    transform: scale(1.2); 
 }
 
 .edit img {
