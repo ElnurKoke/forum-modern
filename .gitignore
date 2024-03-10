@@ -3,4 +3,6 @@ front/static/data/*.jpeg
 front/static/data/*.jpg
 front/static/data/*.png
 front/static/data/*.gif
-!front/static/data/02ct.png
+!front/static/data/z-roles.png
+!front/static/data/z-block.png
+!front/static/data/z-test.png
